@@ -1,5 +1,14 @@
 package com.example.demo;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping("/auth/google")
@@ -23,17 +32,8 @@ public class GoogleAuthController {
     }
     
     @PostMapping("/callback")
-    @Operation(summary = "Handle Google OAuth2 callback", description = "Process Google OAuth2 authorization code and return JWT token")
-    @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Authentication successful"),
-        @ApiResponse(responseCode = "400", description = "Invalid request parameters"),
-        @ApiResponse(responseCode = "401", description = "Authentication failed"),
-        @ApiResponse(responseCode = "429", description = "Too many requests"),
-        @ApiResponse(responseCode = "500", description = "Internal server error")
-    })
-    @RateLimiter(name = "google-auth")
-    public ResponseEntity<AuthResponse> handleGoogleCallback(
-            @Valid @RequestBody GoogleCallbackRequest request,
+    public ResponseEntity<?> handleGoogleCallback(
+            @Validated @RequestBody GoogleCallbackRequest request,
             HttpServletRequest httpRequest) {
         
         try {
